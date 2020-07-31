@@ -37,16 +37,17 @@ public class Application {
                 showAllBankAccounts(service);
             } else if (usersChoice.equals(THREE)) {
                 showBankAccountForGivenPesel(service, scanner);
-            } else if (usersChoice.equals(THREE)) {
+            } else if (usersChoice.equals(FOUR)) {
 
-            }else if (usersChoice.equals(FOUR)) {
+                deleteBankAccoutByPesel(service, scanner);
 
-            }else if (usersChoice.equals(FIVE)) {
+            } else if (usersChoice.equals(FIVE)) {
 
-            }else if (usersChoice.equals(SIX)) {
+                addIncomeToAccountWithGivenPesel(service, scanner);
 
-            }
-            else if (usersChoice.equals(NINE)) {
+            } else if (usersChoice.equals(SIX)) {
+
+            } else if (usersChoice.equals(NINE)) {
                 break;
             }
 
@@ -100,10 +101,12 @@ public class Application {
     public static void showAllBankAccounts(BankAccountService service) {
         List<BankAccount> bankAccounts = service.findAll();
         bankAccounts.forEach(bankAccount -> {
+            System.out.println("---------------------");
+            System.out.println("Bank account: " + (bankAccounts.indexOf(bankAccount) + 1));
             System.out.println("Pesel: " + bankAccount.getPesel());
             System.out.println("Bank account number: " + bankAccount.getAccountNumber());
             System.out.println("Bank account value: " + bankAccount.getValue());
-            System.out.println();
+
         });
 
     }
@@ -115,11 +118,37 @@ public class Application {
         bankAccounts.stream()
                 .filter(bankAccount -> bankAccount.getPesel().equalsIgnoreCase(pesel))
                 .forEach(bankAccount -> {
+                    System.out.println("---------------------");
+                    System.out.println("Bank account:");
                     System.out.println("Pesel: " + bankAccount.getPesel());
                     System.out.println("Bank account number: " + bankAccount.getAccountNumber());
                     System.out.println("Bank account value: " + bankAccount.getValue());
                     System.out.println();
                 });
 
+    }
+
+    public static void deleteBankAccoutByPesel(BankAccountService service, Scanner scanner) {
+        System.out.println("Please provide pesel: ");
+        String pesel = scanner.next();
+        boolean canDelete = service.canDelete(pesel);
+        if (canDelete) {
+            System.out.println("bank account deleted");
+        } else {
+            System.out.println("cannot delete - there is no bank account assigned for pesel: " + pesel);
+        }
+    }
+
+    public static void addIncomeToAccountWithGivenPesel(BankAccountService service, Scanner scanner) {
+        System.out.println("Please provide pesel: ");
+        String pesel = scanner.next();
+        System.out.println("Please provide amount of incoming transfer: ");
+        BigDecimal income = scanner.nextBigDecimal();
+        boolean canAddIncome = service.canAddIncome(pesel, income);
+        if (canAddIncome) {
+            System.out.println("succes!");
+        } else {
+            System.out.println("Cannot add income - there is no bank account assigned for pesel " + pesel);
+        }
     }
 }

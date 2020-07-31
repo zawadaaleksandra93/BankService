@@ -7,13 +7,16 @@ import repository.BankAccountRepository;
 import repository.InMemoryBankAccountRepository;
 import request.CreateBankAccountRequest;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
 @AllArgsConstructor
 @NoArgsConstructor
 public class BankAccountService {
 
     private BankAccountRepository repository;
+
 
 
 
@@ -28,4 +31,19 @@ public class BankAccountService {
     public List<BankAccount> findAll() {
         return repository.findAll();
     }
+
+    public boolean canDelete(String pesel) {
+        if (repository.existByPesel(pesel)) {
+            repository.delete(pesel);
+            return true;
+        }
+        return false;
+    }
+public boolean canAddIncome(String pesel, BigDecimal income){
+        if (repository.existByPesel(pesel)){
+            repository.addIncome(pesel,income);
+            return true;
+        }
+        return false;
+}
 }
