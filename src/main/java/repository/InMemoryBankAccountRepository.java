@@ -28,8 +28,12 @@ public class InMemoryBankAccountRepository implements BankAccountRepository {
 
     @Override
     public BankAccount create(CreateBankAccountRequest request) {
+
         Random random = new Random();
-        Long accountNumber = (random.nextLong()) * 2;
+
+        Long accountNumber = random.nextLong();
+
+
         BankAccount bankAccount = BankAccount.builder()
                 .pesel(request.getPesel())
                 .value(request.getInitialValue())
