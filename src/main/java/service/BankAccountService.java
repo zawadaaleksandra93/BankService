@@ -11,13 +11,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import static java.math.BigDecimal.ZERO;
+
 @AllArgsConstructor
 @NoArgsConstructor
 public class BankAccountService {
 
     private BankAccountRepository repository;
-
-
 
 
     public Optional<BankAccount> createBankAccount(CreateBankAccountRequest request) {
@@ -39,11 +39,29 @@ public class BankAccountService {
         }
         return false;
     }
-public boolean canAddIncome(String pesel, BigDecimal income){
-        if (repository.existByPesel(pesel)){
-            repository.addIncome(pesel,income);
+
+    public boolean canAddIncome(String pesel, BigDecimal income) {
+        if (repository.existByPesel(pesel)) {
+            repository.addIncome(pesel, income);
             return true;
         }
         return false;
-}
+    }
+
+    public boolean canDeductExpense(String pesel, BigDecimal expense) {
+        if (repository.existByPesel(pesel)){
+            checkIfThereIsEnoughMoneyToDeductRequairedExpense(pesel,expense);
+            return true;
+        }
+        return false;
+    }
+    public boolean checkIfThereIsEnoughMoneyToDeductRequairedExpense(String pesel, BigDecimal expense){
+        if (repository.checkIfThereIsEnoughMoneyToDeductExpense(pesel,expense)){
+            repository.deductMoney(pesel, expense);
+            System.out.println("done");
+            return true;
+        }
+        System.out.println("there is not enough money to make this transfer.");
+        return false;
+    }
 }

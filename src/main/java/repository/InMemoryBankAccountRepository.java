@@ -4,11 +4,7 @@ import model.BankAccount;
 import request.CreateBankAccountRequest;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class InMemoryBankAccountRepository implements BankAccountRepository {
 
@@ -57,23 +53,50 @@ public class InMemoryBankAccountRepository implements BankAccountRepository {
 
     }
 
+
     @Override
     public void addIncome(String pesel, BigDecimal income) {
         bankAccounts.stream()
                 .filter(bankAccount -> bankAccount.getPesel().equals(pesel))
                 .findFirst()
-                .ifPresent(bankAccount -> bankAccount.getValue().add(income));
+                .ifPresent(bankAccount -> bankAccount.addMoney(income));
+
+    }
+
+       @Override
+       public BankAccount findUsersBankAccountForGivenPesel(String pesel) {
+
+           BankAccount bankAccount1 = bankAccounts.stream()
+                   .filter(bankAccount -> bankAccount.getPesel().equals(pesel))
+                   .findFirst()
+                   .orElse(null);
+
+           return bankAccount1;
+
+       }
+
+
+    @Override
+
+    public boolean checkIfThereIsEnoughMoneyToDeductExpense(String pesel, BigDecimal expense) {
+         BankAccount usersBankAccount = repository.findUsersBankAccountForGivenPesel(pesel);
+         BigDecimal usersBankAccountValue = usersBankAccount.getValue();
+         if (usersBankAccountValue.compareTo(expense)>=0){
+             return true;
+         }
+         return false;
 
     }
 
     @Override
-    public void deductExpenses(String pesel, BigDecimal expense) {
+    public void deductMoney(String pesel, BigDecimal expense) {
         bankAccounts.stream()
                 .filter(bankAccount -> bankAccount.getPesel().equals(pesel))
                 .findFirst()
-                .ifPresent(bankAccount -> {
-                    bankAccount.getValue();
-                });
+                .ifPresent(bankAccount -> bankAccount.deductMoney(expense));
 
     }
+
 }
+
+

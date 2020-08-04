@@ -46,6 +46,7 @@ public class Application {
                 addIncomeToAccountWithGivenPesel(service, scanner);
 
             } else if (usersChoice.equals(SIX)) {
+                deductExpenseFromAccountWithGivenPesel(service,scanner);
 
             } else if (usersChoice.equals(NINE)) {
                 break;
@@ -149,6 +150,17 @@ public class Application {
             System.out.println("succes!");
         } else {
             System.out.println("Cannot add income - there is no bank account assigned for pesel " + pesel);
+        }
+    }
+    public static void deductExpenseFromAccountWithGivenPesel(BankAccountService service, Scanner scanner){
+        System.out.println("please provide pesel: ");
+        String pesel = scanner.next();
+        System.out.println("please provide amount of outgoing transfer: ");
+        BigDecimal expense = scanner.nextBigDecimal();
+        boolean canDeduct = service.canDeductExpense(pesel,expense);
+        if (!canDeduct){
+                System.out.println("Cannot make this payment - there is no bank account assigned for pesel: " + pesel);
+
         }
     }
 }

@@ -18,7 +18,13 @@ public interface BankAccountRepository {
 
     void addIncome(String pesel, BigDecimal income);
 
+    BankAccount findUsersBankAccountForGivenPesel(String pesel);
+
+    boolean checkIfThereIsEnoughMoneyToDeductExpense(String pesel, BigDecimal expense);
+
+    void deductMoney(String pesel, BigDecimal expense);
 
 
-    void deductExpenses(String pesel, BigDecimal expense);
+
+    //BigDecimal checkWhatIsCurrentValueOfUsersBankAccount(String pesel, BigDecimal expense);
 }

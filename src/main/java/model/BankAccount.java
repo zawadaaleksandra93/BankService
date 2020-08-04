@@ -15,5 +15,10 @@ public class BankAccount {
     @NonNull
     private String accountNumber;
 
-
+    public void addMoney(BigDecimal transfer){
+        value = this.value.add(transfer);
+    };
+    public void deductMoney(BigDecimal transfer){
+        value = this.value.add(transfer.negate());
+    };
 }
